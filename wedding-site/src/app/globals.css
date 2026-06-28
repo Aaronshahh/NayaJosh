@@ -1,0 +1,256 @@
+@import "tailwindcss";
+
+@theme {
+  /* Hushed, dusty-floral palette — low saturation, romantic */
+  --color-bg: #F4ECE6;          /* warm dusty ivory */
+  --color-bg-alt: #ECDFD9;      /* slightly deeper ivory for alternating */
+  --color-bg-dark: #3A2E34;     /* deep muted plum (not pure black) */
+  --color-bg-dark-alt: #463841; /* lifted plum for cards on dark */
+
+  --color-text: #4A3D3A;        /* warm taupe charcoal */
+  --color-text-muted: #74635E;  /* muted brown-grey */
+  --color-text-light: #F4ECE6;  /* ivory text on dark */
+
+  --color-rose: #C0999A;        /* dusty rose — primary accent */
+  --color-rose-deep: #A87B7E;
+  --color-mauve: #A4889A;       /* muted mauve */
+  --color-sage: #9CA98E;        /* muted sage — secondary accent */
+  --color-gold: #C2A883;        /* soft champagne — quiet metallic */
+  --color-gold-light: #D4BF9F;
+
+  --color-blush: #E3D1CB;       /* blush card background */
+  --color-blush-light: #EEE1DB;
+
+  --font-display: "Cormorant Garamond", serif;
+  --font-body: "DM Sans", sans-serif;
+}
+
+:root {
+  --background: #F4ECE6;
+  --foreground: #4A3D3A;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer components {
+  /* ---- Layout primitives ----
+     Base values act as a no-JS fallback; useSectionLayout() overrides
+     min-height, padding and max-width inline so spacing tracks the
+     actual viewport and content stays centered. */
+  .section {
+    @apply relative flex min-h-screen w-full flex-col items-center justify-start overflow-hidden
+           px-6 py-24 md:px-12 md:py-28 lg:px-20;
+  }
+
+  .section-inner {
+    @apply relative z-10 mx-auto w-full max-w-6xl;
+  }
+
+  .section-header {
+    @apply relative z-10 mx-auto flex w-full max-w-2xl flex-col items-center justify-center text-center;
+    margin-top: clamp(-4rem, -6vh, -2.5rem);
+    padding-bottom: 0;
+  }
+
+  .section-header + .section-inner {
+    margin-top: clamp(4rem, 8vh, 7rem) !important;
+  }
+
+  .section-header > svg {
+    @apply mx-auto self-center;
+  }
+
+  /* ---- Type roles (color set in markup for light/dark contexts) ---- */
+  .section-eyebrow {
+    @apply block w-full text-center font-display italic text-xl md:text-2xl;
+    letter-spacing: 0.01em;
+  }
+
+  .section-title {
+    @apply block w-full text-center font-display font-medium text-balance text-4xl md:text-5xl lg:text-[3.75rem];
+    line-height: 1.04;
+    letter-spacing: -0.015em;
+  }
+
+  .section-subtitle {
+    @apply mx-auto mt-5 max-w-xl text-base md:text-lg leading-relaxed text-balance;
+  }
+
+  /* ---- Buttons ---- */
+  .btn-primary {
+    @apply inline-flex items-center justify-center px-9 py-3.5 text-xs font-semibold tracking-[0.18em] uppercase
+           bg-rose text-text-light border border-rose hover:bg-transparent hover:text-rose
+           transition-colors duration-300 ease-out;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center px-9 py-3.5 text-xs font-semibold tracking-[0.18em] uppercase
+           bg-transparent text-rose border border-rose hover:bg-rose hover:text-text-light
+           transition-colors duration-300 ease-out;
+  }
+
+  /* ---- Pills ---- */
+  .pill-tag {
+    @apply inline-flex items-center gap-2 px-3.5 py-1.5 text-[0.7rem] font-medium tracking-[0.12em] uppercase
+           bg-blush/70 text-text border border-rose/30 rounded-full;
+  }
+
+  .pill-tag-dark {
+    @apply inline-flex items-center gap-2 px-3.5 py-1.5 text-[0.7rem] font-medium tracking-[0.12em] uppercase
+           bg-white/5 text-blush border border-rose/30 rounded-full;
+  }
+
+  /* ---- Cards ---- */
+  .card-light {
+    @apply relative rounded-[3px] border border-rose/20 bg-blush/25 transition-colors duration-300
+           hover:border-rose/45;
+  }
+
+  .card-dark {
+    @apply relative rounded-[3px] border border-white/10 bg-white/[0.04] transition-colors duration-300
+           hover:border-rose/40 hover:bg-white/[0.06];
+  }
+
+  /* ---- Matted photo frame ---- */
+  .photo-frame {
+    @apply relative overflow-hidden rounded-[3px] bg-bg p-2 shadow-[0_24px_60px_-28px_rgba(58,46,52,0.55)]
+           ring-1 ring-rose/20;
+  }
+  .photo-frame img {
+    @apply h-full w-full rounded-[2px] object-cover;
+  }
+
+  /* ---- Forms ---- */
+  .input-field {
+    @apply w-full px-0 py-2.5 bg-transparent border-b border-rose/30 focus:border-rose
+           text-text placeholder:text-text/35 transition-colors duration-200
+           font-body text-base outline-none;
+  }
+
+  .label-field {
+    @apply block text-[0.7rem] font-semibold tracking-[0.14em] uppercase text-rose-deep mb-2;
+  }
+}
+
+/* One-shot, state-triggered animation (not scroll-based) */
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-scale-in {
+  animation: scale-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translateY(0) rotate(var(--drift-rot, 0deg));
+  }
+  50% {
+    transform: translateY(-12px) rotate(var(--drift-rot, 0deg));
+  }
+}
+
+.animate-drift {
+  animation: drift 9s ease-in-out infinite;
+}
+
+/*
+  Scroll-reveal system — transition based for smooth, stutter-free reveals.
+  Stagger via inline transition-delay.
+*/
+.reveal,
+.reveal-left,
+.reveal-right,
+.reveal-scale {
+  opacity: 0;
+  transition:
+    opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reveal {
+  transform: translate3d(0, 28px, 0);
+}
+.reveal-left {
+  transform: translate3d(-36px, 0, 0);
+}
+.reveal-right {
+  transform: translate3d(36px, 0, 0);
+}
+.reveal-scale {
+  transform: scale(0.96);
+}
+
+.reveal.is-visible,
+.reveal-left.is-visible,
+.reveal-right.is-visible,
+.reveal-scale.is-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-left,
+  .reveal-right,
+  .reveal-scale {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .animate-scale-in,
+  .animate-drift {
+    animation: none;
+  }
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+::selection {
+  background: var(--color-rose);
+  color: var(--color-text-light);
+}
