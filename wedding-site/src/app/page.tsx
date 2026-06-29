@@ -7,7 +7,6 @@ import { RSVP } from "@/components/RSVP";
 import { Travel } from "@/components/Travel";
 import { Schedule } from "@/components/Schedule";
 import { QA } from "@/components/QA";
-import { BackToTop } from "@/components/BackToTop";
 import { FloralDivider } from "@/components/Florals";
 
 export default function Home() {
@@ -22,7 +21,6 @@ export default function Home() {
         <Schedule />
         <QA />
       </main>
-      <BackToTop />
       <footer className="relative overflow-hidden border-t border-rose/15 bg-bg-dark px-6 py-16 text-center md:py-20">
         <FloralDivider className="mx-auto h-5 w-48 text-rose/40" />
         <p className="mt-8 select-none font-display text-5xl font-light tracking-[0.08em] text-text-light/10 md:text-7xl">

@@ -16,19 +16,6 @@ interface EventData {
 
 const events: EventData[] = [
   {
-    name: "Wedding Ceremony",
-    date: "October 26, 2026",
-    time: "4:00 PM",
-    location: "The Geraghty, Chicago",
-    description: "Join us as we exchange vows surrounded by family and friends.",
-    image: "/images/story-3.jpg",
-    icon: (
-      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-      </svg>
-    ),
-  },
-  {
     name: "Mehendi / Sangeet",
     date: "October 25, 2026",
     time: "6:00 PM",
@@ -38,6 +25,19 @@ const events: EventData[] = [
     icon: (
       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19V6l12-3v13M9 19c0 1.805.547 3.508 1.494 4.89M9 19s4.803.95 5.367 2.238m0-2.238A11.51 11.51 0 009 19m9.367-2.238A62.768 62.768 0 019 19m0 0l-2.514-.927A60.09 60.09 0 004.59 21.13" />
+      </svg>
+    ),
+  },
+  {
+    name: "Wedding Ceremony",
+    date: "October 26, 2026",
+    time: "4:00 PM",
+    location: "The Geraghty, Chicago",
+    description: "Join us as we exchange vows surrounded by family and friends.",
+    image: "/images/story-3.jpg",
+    icon: (
+      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
       </svg>
     ),
   },
