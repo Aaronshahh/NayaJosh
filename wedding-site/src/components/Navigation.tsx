@@ -4,12 +4,16 @@ import Link from "next/link";
 import { useScrollNav, useViewport } from "./hooks";
 
 const leftLinks = [
+  { href: "#our-story", label: "Story" },
+  { href: "#photo-gallery", label: "Photos" },
   { href: "#rsvp", label: "RSVP" },
-  { href: "#travel", label: "Travel" },
+  { href: "#celebrations", label: "Events" },
 ];
 
 const rightLinks = [
+  { href: "#travel", label: "Travel" },
   { href: "#schedule", label: "Schedule" },
+  { href: "#gifts", label: "Gifts" },
   { href: "#qa", label: "Q&A" },
 ];
 
@@ -25,7 +29,7 @@ export function Navigation() {
   const { width } = useViewport();
   const edgePad = viewportGutter(width);
 
-  const linkClass = `text-[0.7rem] font-semibold tracking-[0.2em] uppercase transition-colors duration-200 hover:text-rose ${
+  const linkClass = `text-[0.58rem] lg:text-[0.65rem] xl:text-[0.7rem] font-semibold tracking-[0.1em] lg:tracking-[0.16em] xl:tracking-[0.2em] uppercase transition-colors duration-200 hover:text-rose ${
     scrolled ? "text-text" : "text-text-light"
   }`;
 
@@ -53,7 +57,7 @@ export function Navigation() {
           style={{ paddingLeft: edgePad, paddingRight: edgePad }}
           aria-label="Wedding sections"
         >
-          <div className="flex items-center justify-start gap-10 lg:gap-12">
+          <div className="flex items-center justify-start gap-2 lg:gap-4 xl:gap-7">
             {leftLinks.map((link) => (
               <Link
                 key={link.href}
@@ -77,7 +81,7 @@ export function Navigation() {
             </Link>
           </div>
 
-          <div className="flex items-center justify-end gap-10 lg:gap-12">
+          <div className="flex items-center justify-end gap-2 lg:gap-4 xl:gap-7">
             {rightLinks.map((link) => (
               <Link
                 key={link.href}

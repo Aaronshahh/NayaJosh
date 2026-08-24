@@ -13,7 +13,7 @@ export async function GET(request: Request) {
     const { data, error } = await supabase
       .from("rsvps")
       .select(
-        "id, created_at, full_name, email, event_key, event_name, attending, guest_count, message, event_date, event_time, event_location"
+        "id, created_at, invite_party_id, full_name, email, event_key, event_name, attending, guest_count, guest_names, invitee_responses, message, event_date, event_time, event_location"
       )
       .order("created_at", { ascending: false });
 

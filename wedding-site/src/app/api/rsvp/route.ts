@@ -2,16 +2,25 @@ import { NextResponse } from "next/server";
 import { getBearerToken, verifySessionToken } from "@/lib/auth";
 import { EVENT_DETAILS, roleAllowsEvent, type EventKey } from "@/lib/events";
 import { sendRsvpConfirmation } from "@/lib/email";
-import { getSupabaseAdmin } from "@/lib/supabase";
+import { getSupabaseAdmin, type InviteeResponse, type InvitePartyRow } from "@/lib/supabase";
 
 type RsvpBody = {
   eventKey?: EventKey;
-  fullName?: string;
+  invitePartyId?: string;
   email?: string;
-  attending?: boolean;
-  guestCount?: number;
+  inviteeResponses?: InviteeResponse[];
+  guestNames?: string[];
   message?: string;
 };
+
+function normalizeName(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
 
 export async function POST(request: Request) {
   try {
@@ -22,10 +31,11 @@ export async function POST(request: Request) {
 
     const body = (await request.json()) as RsvpBody;
     const eventKey = body.eventKey;
-    const fullName = body.fullName?.trim() ?? "";
+    const invitePartyId = body.invitePartyId?.trim() ?? "";
     const email = body.email?.trim().toLowerCase() ?? "";
-    const attending = Boolean(body.attending);
-    const guestCount = Number(body.guestCount ?? 1);
+    const submittedInviteeResponses = Array.isArray(body.inviteeResponses) ? body.inviteeResponses : [];
+    const submittedGuestNames = Array.isArray(body.guestNames) ? body.guestNames : [];
+    const guestNames = submittedGuestNames.map((name) => String(name).trim()).filter(Boolean);
     const message = body.message?.trim() || null;
 
     if (!eventKey || !(eventKey in EVENT_DETAILS)) {
@@ -34,25 +44,79 @@ export async function POST(request: Request) {
     if (!roleAllowsEvent(role, eventKey)) {
       return NextResponse.json({ error: "This event is not available with your invite" }, { status: 403 });
     }
-    if (!fullName || !email || !email.includes("@")) {
-      return NextResponse.json({ error: "Name and a valid email are required" }, { status: 400 });
+    if (!invitePartyId) {
+      return NextResponse.json({ error: "Select your invitation party from the search results" }, { status: 400 });
     }
-    if (!Number.isInteger(guestCount) || guestCount < 1 || guestCount > 6) {
-      return NextResponse.json({ error: "Guest count must be between 1 and 6" }, { status: 400 });
+    if (!email || !email.includes("@")) {
+      return NextResponse.json({ error: "A valid email is required" }, { status: 400 });
     }
 
     const event = EVENT_DETAILS[eventKey];
     const supabase = getSupabaseAdmin();
+    const { data: partyData, error: partyError } = await supabase
+      .from("invite_parties")
+      .select("id, event_key, display_name, invited_names, party_size_limit, sort_order")
+      .eq("id", invitePartyId)
+      .eq("event_key", eventKey)
+      .single();
+
+    if (partyError || !partyData) {
+      return NextResponse.json({ error: "That invitation party could not be found" }, { status: 400 });
+    }
+
+    const party = partyData as InvitePartyRow;
+    const normalizedResponseNames = submittedInviteeResponses.map((response) =>
+      normalizeName(String(response?.name ?? ""))
+    );
+    const hasEveryInviteeResponse =
+      submittedInviteeResponses.length === party.invited_names.length &&
+      new Set(normalizedResponseNames).size === party.invited_names.length &&
+      submittedInviteeResponses.every((response) => typeof response?.attending === "boolean") &&
+      party.invited_names.every((name) => normalizedResponseNames.includes(normalizeName(name)));
+
+    if (!hasEveryInviteeResponse) {
+      return NextResponse.json(
+        { error: "Please accept or decline for each person named on the invitation" },
+        { status: 400 }
+      );
+    }
+
+    const inviteeResponses = party.invited_names.map((name) => {
+      const response = submittedInviteeResponses.find(
+        (candidate) => normalizeName(String(candidate.name ?? "")) === normalizeName(name)
+      )!;
+      return { name, attending: response.attending };
+    });
+    const attending = inviteeResponses.some((response) => response.attending);
+    const maxAdditionalGuests = party.party_size_limit - party.invited_names.length;
+    if (
+      guestNames.length > maxAdditionalGuests ||
+      guestNames.some((name) => name.length > 100)
+    ) {
+      return NextResponse.json(
+        {
+          error: `This invitation allows ${maxAdditionalGuests} additional ${
+            maxAdditionalGuests === 1 ? "guest" : "guests"
+          }`,
+        },
+        { status: 400 }
+      );
+    }
+
+    const attendingGuestNames = attending ? guestNames : [];
 
     const { data, error } = await supabase
       .from("rsvps")
       .insert({
-        full_name: fullName,
+        invite_party_id: party.id,
+        full_name: party.display_name,
         email,
         event_key: eventKey,
         event_name: event.name,
         attending,
-        guest_count: attending ? guestCount : 0,
+        guest_count: attendingGuestNames.length,
+        guest_names: attendingGuestNames,
+        invitee_responses: inviteeResponses,
         message,
         event_date: event.date,
         event_time: event.time,
@@ -68,10 +132,11 @@ export async function POST(request: Request) {
 
     try {
       await sendRsvpConfirmation({
-        fullName,
+        fullName: party.display_name,
         email,
         attending,
-        guestCount: attending ? guestCount : 0,
+        inviteeResponses,
+        guestNames: attendingGuestNames,
         message,
         eventName: event.name,
         eventDate: event.date,

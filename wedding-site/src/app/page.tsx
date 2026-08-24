@@ -3,9 +3,12 @@
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
 import { OurStory } from "@/components/OurStory";
+import { PhotoGallery } from "@/components/PhotoGallery";
 import { RSVP } from "@/components/RSVP";
+import { EventGuide } from "@/components/EventGuide";
 import { Travel } from "@/components/Travel";
 import { Schedule } from "@/components/Schedule";
+import { Gifts } from "@/components/Gifts";
 import { QA } from "@/components/QA";
 import { FloralDivider } from "@/components/Florals";
 import { AccessProvider, useAccess } from "@/components/AccessProvider";
@@ -30,9 +33,12 @@ function SiteContent() {
       <main className="pt-0">
         <Hero />
         <OurStory />
+        <PhotoGallery />
         <RSVP />
+        <EventGuide />
         <Travel />
         <Schedule />
+        <Gifts />
         <QA />
       </main>
       <footer className="relative overflow-hidden border-t border-rose/15 bg-bg-dark px-6 py-16 text-center md:py-20">

@@ -57,6 +57,8 @@ export function AdminDashboard() {
         guest.full_name.toLowerCase().includes(q) ||
         guest.email.toLowerCase().includes(q) ||
         guest.event_name.toLowerCase().includes(q) ||
+        guest.invitee_responses.some((response) => response.name.toLowerCase().includes(q)) ||
+        guest.guest_names.some((name) => name.toLowerCase().includes(q)) ||
         (guest.message ?? "").toLowerCase().includes(q)
       );
     });
@@ -81,7 +83,9 @@ export function AdminDashboard() {
       "Email",
       "Event",
       "Attending",
-      "Guests",
+      "Invitee Responses",
+      "Guest Count",
+      "Guest Names",
       "Date",
       "Time",
       "Location",
@@ -96,7 +100,11 @@ export function AdminDashboard() {
           g.email,
           g.event_name,
           g.attending ? "Yes" : "No",
+          g.invitee_responses
+            .map((response) => `${response.name}: ${response.attending ? "Accept" : "Decline"}`)
+            .join("; "),
           String(g.guest_count),
+          g.guest_names.join("; "),
           g.event_date ?? "",
           g.event_time ?? "",
           g.event_location ?? "",
@@ -144,7 +152,7 @@ export function AdminDashboard() {
             { label: "Total RSVPs", value: stats.total },
             { label: "Attending", value: stats.attending },
             { label: "Declining", value: stats.declining },
-            { label: "Guest headcount", value: stats.headcount },
+            { label: "Additional guests", value: stats.headcount },
           ].map((stat) => (
             <div key={stat.label} className="card-light px-5 py-4">
               <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-rose-deep">{stat.label}</p>
@@ -158,7 +166,7 @@ export function AdminDashboard() {
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search name, email, message…"
+            placeholder="Search invitee, guest, email…"
             className="input-field md:max-w-sm"
           />
           <select
@@ -196,8 +204,9 @@ export function AdminDashboard() {
                   "Name",
                   "Email",
                   "Event",
-                  "Status",
-                  "Guests",
+                  "Named invitees",
+                  "Guest count",
+                  "Guest names",
                   "When",
                   "Where",
                   "Message",
@@ -211,13 +220,13 @@ export function AdminDashboard() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={9} className="px-4 py-10 text-center text-text-muted">
+                  <td colSpan={10} className="px-4 py-10 text-center text-text-muted">
                     Loading guests…
                   </td>
                 </tr>
               ) : filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={9} className="px-4 py-10 text-center text-text-muted">
+                  <td colSpan={10} className="px-4 py-10 text-center text-text-muted">
                     No RSVPs match these filters yet.
                   </td>
                 </tr>
@@ -230,12 +239,35 @@ export function AdminDashboard() {
                     <td className="px-4 py-3 font-medium">{guest.full_name}</td>
                     <td className="px-4 py-3">{guest.email}</td>
                     <td className="px-4 py-3">{guest.event_name}</td>
-                    <td className="px-4 py-3">
-                      <span className={guest.attending ? "text-sage" : "text-rose-deep"}>
-                        {guest.attending ? "Attending" : "Declining"}
-                      </span>
+                    <td className="min-w-48 px-4 py-3">
+                      {guest.invitee_responses.length ? (
+                        <ul className="space-y-1">
+                          {guest.invitee_responses.map((response) => (
+                            <li key={response.name}>
+                              <span className={response.attending ? "text-sage" : "text-rose-deep"}>
+                                {response.name}: {response.attending ? "Attending" : "Declining"}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <span className={guest.attending ? "text-sage" : "text-rose-deep"}>
+                          {guest.attending ? "Attending" : "Declining"}
+                        </span>
+                      )}
                     </td>
                     <td className="px-4 py-3">{guest.guest_count}</td>
+                    <td className="min-w-48 px-4 py-3">
+                      {guest.guest_names.length ? (
+                        <ul className="space-y-1">
+                          {guest.guest_names.map((name, index) => (
+                            <li key={`${name}-${index}`}>{name}</li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <span className="text-text-muted">—</span>
+                      )}
+                    </td>
                     <td className="px-4 py-3 text-text-muted">
                       {[guest.event_date, guest.event_time].filter(Boolean).join(" · ")}
                     </td>

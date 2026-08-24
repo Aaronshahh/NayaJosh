@@ -153,6 +153,15 @@ export function useSectionLayout() {
   const topPad = height === 0 ? 8 : Math.max(8, Math.round(height * 0.006));
   const bottomPad = height === 0 ? 112 : Math.max(96, Math.round(height * 0.085)) + NAV_HEIGHT / 2;
 
+  // Shared viewport-relative rhythm for trailing blocks (e.g. Q&A contact card).
+  const blockGap = height === 0 ? 80 : Math.max(72, Math.round(height * 0.09));
+  const categoryGap = height === 0 ? 120 : Math.max(96, Math.round(height * 0.075));
+  const stickyNavTop = NAV_HEIGHT + (height === 0 ? 32 : Math.max(24, Math.round(height * 0.025)));
+  const scrollAnchorOffset = stickyNavTop + (height === 0 ? 16 : Math.max(12, Math.round(height * 0.012)));
+  const cardMaxWidth = width === 0 ? 960 : Math.min(maxWidth, Math.round(width * 0.88));
+  const cardPaddingX = width === 0 ? 48 : Math.max(44, Math.round(width * 0.055));
+  const cardPaddingY = height === 0 ? 48 : Math.max(44, Math.round(height * 0.05));
+
   const section: CSSProperties = {
     minHeight: height ? `${height}px` : "100vh",
     paddingTop: topPad,
@@ -168,7 +177,21 @@ export function useSectionLayout() {
     marginInline: "auto",
   };
 
-  return { section, inner, width, height };
+  return {
+    section,
+    inner,
+    width,
+    height,
+    gutter,
+    navHeight: NAV_HEIGHT,
+    blockGap,
+    categoryGap,
+    stickyNavTop,
+    scrollAnchorOffset,
+    cardMaxWidth,
+    cardPaddingX,
+    cardPaddingY,
+  };
 }
 
 /**

@@ -1,10 +1,12 @@
 import { Resend } from "resend";
+import type { InviteeResponse } from "./supabase";
 
 type ConfirmationInput = {
   fullName: string;
   email: string;
   attending: boolean;
-  guestCount: number;
+  inviteeResponses: InviteeResponse[];
+  guestNames: string[];
   message?: string | null;
   eventName: string;
   eventDate: string;
@@ -30,19 +32,28 @@ export async function sendRsvpConfirmation(input: ConfirmationInput) {
 
   const resend = new Resend(apiKey);
   const statusLine = input.attending
-    ? `We're so glad you'll be joining us for ${input.eventName}.`
-    : `We're sorry you can't make ${input.eventName}, but thank you for letting us know.`;
+    ? `We're so glad members of your party will be joining us for ${input.eventName}.`
+    : `We're sorry your party can't make ${input.eventName}, but thank you for letting us know.`;
 
   const details = [
     ["Event", input.eventName],
     ["Date", input.eventDate],
     ["Time", input.eventTime],
     ["Location", input.eventLocation],
-    ["Name", input.fullName],
+    ["Invitation", input.fullName],
     ["Email", input.email],
-    ["Response", input.attending ? "Joyfully accept" : "Regretfully decline"],
-    ["Guests", String(input.guestCount)],
+    [
+      "Responses",
+      input.inviteeResponses
+        .map((response) => `${response.name}: ${response.attending ? "Accept" : "Decline"}`)
+        .join(", "),
+    ],
+    ["Additional guests", String(input.guestNames.length)],
   ];
+
+  if (input.guestNames.length) {
+    details.push(["Guest names", input.guestNames.join(", ")]);
+  }
 
   if (input.message?.trim()) {
     details.push(["Message", input.message.trim()]);
