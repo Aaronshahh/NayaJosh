@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useScrollNav } from "./hooks";
+import { useScrollNav, useViewport } from "./hooks";
 
 const leftLinks = [
   { href: "#rsvp", label: "RSVP" },
@@ -13,8 +13,17 @@ const rightLinks = [
   { href: "#qa", label: "Q&A" },
 ];
 
+function viewportGutter(width: number) {
+  if (width === 0) return 24;
+  if (width < 640) return 24;
+  if (width < 1024) return 48;
+  return 80;
+}
+
 export function Navigation() {
   const { scrolled } = useScrollNav();
+  const { width } = useViewport();
+  const edgePad = viewportGutter(width);
 
   const linkClass = `text-[0.7rem] font-semibold tracking-[0.2em] uppercase transition-colors duration-200 hover:text-rose ${
     scrolled ? "text-text" : "text-text-light"
@@ -33,34 +42,48 @@ export function Navigation() {
             : "bg-transparent border-b border-transparent"
         }`}
       >
+        {/*
+          One full-viewport nav container.
+          Horizontal padding is computed from the viewport width (same gutters
+          as page sections), so both ends sit the same distance from the
+          screen edge — not derived from the center monogram.
+        */}
         <nav
-          className="mx-auto grid h-16 max-w-6xl translate-x-4 grid-cols-[1fr_auto_1fr] items-center gap-8 px-6 md:h-20 md:translate-x-8 md:px-12 lg:translate-x-12 lg:px-20"
+          className="grid h-16 w-full grid-cols-3 items-center md:h-20"
+          style={{ paddingLeft: edgePad, paddingRight: edgePad }}
           aria-label="Wedding sections"
         >
-          {/* Left links — evenly spaced */}
-          <div className="hidden items-center justify-start gap-12 md:flex">
+          <div className="flex items-center justify-start gap-10 lg:gap-12">
             {leftLinks.map((link) => (
-              <Link key={link.href} href={link.href} className={linkClass}>
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`${linkClass} hidden md:inline-flex`}
+              >
                 {link.label}
               </Link>
             ))}
           </div>
 
-          {/* Center monogram */}
-          <Link
-            href="#hero"
-            className={`justify-self-center font-display text-2xl font-medium tracking-[0.12em] transition-colors duration-500 md:text-3xl ${
-              scrolled ? "text-text" : "text-text-light"
-            }`}
-            aria-label="Back to top"
-          >
-            N &amp; J
-          </Link>
+          <div className="flex items-center justify-center">
+            <Link
+              href="#hero"
+              className={`font-display text-2xl font-medium tracking-[0.12em] transition-colors duration-500 md:text-3xl ${
+                scrolled ? "text-text" : "text-text-light"
+              }`}
+              aria-label="Back to top"
+            >
+              N &amp; J
+            </Link>
+          </div>
 
-          {/* Right links — evenly spaced */}
-          <div className="hidden items-center justify-end gap-12 md:flex">
+          <div className="flex items-center justify-end gap-10 lg:gap-12">
             {rightLinks.map((link) => (
-              <Link key={link.href} href={link.href} className={linkClass}>
+              <Link
+                key={link.href}
+                href={link.href}
+                className={`${linkClass} hidden md:inline-flex`}
+              >
                 {link.label}
               </Link>
             ))}

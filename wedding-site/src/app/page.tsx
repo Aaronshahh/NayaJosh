@@ -8,11 +8,25 @@ import { Travel } from "@/components/Travel";
 import { Schedule } from "@/components/Schedule";
 import { QA } from "@/components/QA";
 import { FloralDivider } from "@/components/Florals";
+import { AccessProvider, useAccess } from "@/components/AccessProvider";
+import { PasswordGate } from "@/components/PasswordGate";
+import { AdminDashboard } from "@/components/AdminDashboard";
 
-export default function Home() {
+function SiteContent() {
+  const { role, lock } = useAccess();
+
+  if (role === "admin") {
+    return <AdminDashboard />;
+  }
+
   return (
     <div className="relative min-h-screen bg-bg font-body antialiased">
       <Navigation />
+      <div className="fixed right-4 top-24 z-40 md:right-6">
+        <button type="button" onClick={lock} className="btn-secondary bg-bg/80 px-4 py-2 backdrop-blur-sm">
+          Lock
+        </button>
+      </div>
       <main className="pt-0">
         <Hero />
         <OurStory />
@@ -32,5 +46,15 @@ export default function Home() {
         </p>
       </footer>
     </div>
+  );
+}
+
+export default function Home() {
+  return (
+    <AccessProvider>
+      <PasswordGate>
+        <SiteContent />
+      </PasswordGate>
+    </AccessProvider>
   );
 }
