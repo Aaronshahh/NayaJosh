@@ -80,6 +80,7 @@ export async function sendRsvpConfirmation(input: ConfirmationInput) {
   const { error } = await resend.emails.send({
     from,
     to: input.email,
+    replyTo: process.env.RESEND_REPLY_TO || undefined,
     subject: `RSVP confirmation — ${input.eventName}`,
     html,
   });
