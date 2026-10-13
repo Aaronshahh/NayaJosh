@@ -17,3 +17,6 @@ _shot*.png
 reference/
 .agents/
 skills-lock.json
+
+# supabase CLI scratch
+**/supabase/.temp/

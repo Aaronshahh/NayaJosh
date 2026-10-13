@@ -1,6 +1,8 @@
 "use client";
 
+import Image from "next/image";
 import { FloralDivider } from "./Florals";
+import { Parallax, SceneFrame } from "./ui/motion-primitives";
 import { useScrollReveal, useSectionLayout } from "./hooks";
 
 export function Gifts() {
@@ -16,6 +18,7 @@ export function Gifts() {
       aria-labelledby="gifts-title"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(227,209,203,0.5),transparent_58%)]" />
+      <SceneFrame>
       <div
         className="relative border-y border-rose/25 py-14 text-center md:py-16"
         style={{
@@ -32,9 +35,7 @@ export function Gifts() {
             No boxed gifts
           </p>
           <div className="flex w-full justify-center">
-            <FloralDivider
-              className={`mt-3 h-5 w-40 text-rose/55 reveal ${isVisible ? "is-visible" : ""}`}
-            />
+            <FloralDivider draw="scroll" className="mt-3 h-7 w-48 text-rose/55" />
           </div>
           <h2
             id="gifts-title"
@@ -45,18 +46,37 @@ export function Gifts() {
           >
             Gifts &amp; Well Wishes
           </h2>
-          <p
-            className={`mx-auto mt-6 max-w-3xl text-center text-base leading-8 text-text-muted reveal md:text-lg ${
+          <figure
+            className={`photo-frame mx-auto mt-10 max-w-[16rem] bg-bg reveal-scale md:max-w-[18rem] ${
               isVisible ? "is-visible" : ""
             }`}
-            style={{ marginInline: "auto", transitionDelay: "180ms" }}
+            style={{ transitionDelay: "180ms" }}
           >
-            Many of you are traveling from across the globe to celebrate with us, so your presence truly
-            means the world to us and is more than enough. However, for those of you who insist on giving
-            a gift (we know some of you are wonderfully stubborn!), we would gratefully accept a small
-            contribution toward our house fund. A card box will be available at the wedding.
+            <div className="relative aspect-[2/3] overflow-hidden rounded-[2px]">
+              <Parallax drift={18} scale={1.12} className="absolute inset-0" innerClassName="h-full w-full">
+                <Image
+                  src="/images/gifts.jpg"
+                  alt="A brass Ganesh statue garlanded with pink flowers"
+                  fill
+                  sizes="(max-width: 768px) 16rem, 18rem"
+                  className="object-cover"
+                />
+              </Parallax>
+            </div>
+          </figure>
+          <p
+            className={`mx-auto mt-10 max-w-3xl text-center text-base leading-8 text-text-muted reveal md:text-lg ${
+              isVisible ? "is-visible" : ""
+            }`}
+            style={{ marginInline: "auto", transitionDelay: "260ms" }}
+          >
+            We are so grateful to have friends and family traveling from near and far to celebrate with
+            us. Your presence is truly the greatest gift. For those who wish to give something more, we
+            would be grateful for a contribution toward our house fund as we begin this next chapter
+            together. A card box will be available at the wedding.
           </p>
       </div>
+      </SceneFrame>
     </section>
   );
 }

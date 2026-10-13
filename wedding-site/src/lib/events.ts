@@ -16,21 +16,23 @@ export const EVENT_DETAILS: Record<
 > = {
   sangeet: {
     key: "sangeet",
-    name: "Mehendi / Sangeet",
-    date: "October 25, 2026",
-    time: "6:00 PM",
-    location: "Chicago Cultural Center",
-    description: "An evening of music, dance, and henna before the big day.",
-    image: "/images/sangeet.jpeg",
+    name: "Mehndi & Welcome Dinner",
+    date: "Saturday, June 12, 2027",
+    time: "4:00 PM – 8:00 PM EDT",
+    location: "Saffron Cuisine, Cambridge, ON",
+    description:
+      "An evening of henna, food, music, and time with family and friends before the wedding celebrations begin.",
+    image: "/images/rsvp/mehndi.jpg",
   },
   wedding: {
     key: "wedding",
-    name: "Wedding Ceremony",
-    date: "October 26, 2026",
-    time: "4:00 PM",
-    location: "The Geraghty, Chicago",
-    description: "Join us as we exchange vows surrounded by family and friends.",
-    image: "/images/story-3.jpg",
+    name: "Indian Wedding",
+    date: "Sunday, June 13, 2027",
+    time: "2:00 PM – 12:00 AM EDT",
+    location: "Mississauga Convention Centre, Mississauga, ON",
+    description:
+      "A ceremony filled with colour, music, family, and tradition, followed by cocktails and the reception.",
+    image: "/images/rsvp/wedding.jpg",
   },
 };
 

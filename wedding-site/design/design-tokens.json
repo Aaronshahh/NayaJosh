@@ -1,0 +1,78 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format/",
+  "color": {
+    "surface": {
+      "bg": { "$type": "color", "$value": "#F4ECE6", "$description": "Warm dusty ivory — default page background" },
+      "bg-alt": { "$type": "color", "$value": "#ECDFD9", "$description": "Deeper ivory for alternating sections" },
+      "bg-dark": { "$type": "color", "$value": "#3A2E34", "$description": "Deep muted plum — dark sections, never pure black" },
+      "bg-dark-alt": { "$type": "color", "$value": "#463841", "$description": "Lifted plum — cards on dark" },
+      "blush": { "$type": "color", "$value": "#E3D1CB", "$description": "Blush card background" },
+      "blush-light": { "$type": "color", "$value": "#EEE1DB", "$description": "Lighter blush surface" }
+    },
+    "text": {
+      "default": { "$type": "color", "$value": "#4A3D3A", "$description": "Warm taupe charcoal — body on light" },
+      "muted": { "$type": "color", "$value": "#74635E", "$description": "Muted brown-grey — secondary text" },
+      "light": { "$type": "color", "$value": "#F4ECE6", "$description": "Ivory — text on dark surfaces" }
+    },
+    "accent": {
+      "rose": { "$type": "color", "$value": "#C0999A", "$description": "Dusty rose — primary accent" },
+      "rose-deep": { "$type": "color", "$value": "#A87B7E", "$description": "Deeper rose — eyebrows, labels, hovers" },
+      "mauve": { "$type": "color", "$value": "#A4889A", "$description": "Muted mauve — variety accent" },
+      "sage": { "$type": "color", "$value": "#9CA98E", "$description": "Muted sage — secondary botanical accent" },
+      "gold": { "$type": "color", "$value": "#C2A883", "$description": "Soft champagne — quiet metallic" },
+      "gold-light": { "$type": "color", "$value": "#D4BF9F", "$description": "Lighter champagne" }
+    }
+  },
+  "font": {
+    "family": {
+      "display": { "$type": "fontFamily", "$value": ["Cormorant Garamond", "serif"], "$description": "Headings, eyebrows, expressive numerals" },
+      "body": { "$type": "fontFamily", "$value": ["DM Sans", "sans-serif"], "$description": "Body copy, UI, forms" }
+    },
+    "lineHeight": {
+      "body": { "$type": "number", "$value": 1.65 },
+      "title": { "$type": "number", "$value": 1.04 }
+    },
+    "letterSpacing": {
+      "title": { "$type": "dimension", "$value": "-0.015em" },
+      "micro-label": { "$type": "dimension", "$value": "0.14em", "$description": "Uppercase micro-labels (0.12–0.18em range)" },
+      "button": { "$type": "dimension", "$value": "0.18em" }
+    }
+  },
+  "radius": {
+    "card": { "$type": "dimension", "$value": "3px", "$description": "Cards and frames — the site's only card radius" },
+    "image-inset": { "$type": "dimension", "$value": "2px", "$description": "Images inside photo-frame mats" },
+    "pill": { "$type": "dimension", "$value": "9999px", "$description": "Pill tags only — never buttons or cards" }
+  },
+  "border": {
+    "hairline-light": { "$type": "color", "$value": "rgba(192, 153, 154, 0.2)", "$description": "rose/20 — default card border on light" },
+    "hairline-light-hover": { "$type": "color", "$value": "rgba(192, 153, 154, 0.45)", "$description": "rose/45 — card border hover" },
+    "hairline-dark": { "$type": "color", "$value": "rgba(255, 255, 255, 0.1)", "$description": "white/10 — card border on plum" }
+  },
+  "shadow": {
+    "photo-mat": {
+      "$type": "shadow",
+      "$value": { "color": "rgba(58, 46, 52, 0.55)", "offsetX": "0px", "offsetY": "24px", "blur": "60px", "spread": "-28px" },
+      "$description": "The single sanctioned shadow — photo-frame mats only"
+    }
+  },
+  "motion": {
+    "easing": {
+      "standard": { "$type": "cubicBezier", "$value": [0.22, 1, 0.36, 1], "$description": "The one easing curve, used everywhere" }
+    },
+    "duration": {
+      "focus": { "$type": "duration", "$value": "200ms" },
+      "hover": { "$type": "duration", "$value": "300ms" },
+      "state": { "$type": "duration", "$value": "400ms", "$description": "One-shot state animations (scale-in)" },
+      "reveal": { "$type": "duration", "$value": "800ms", "$description": "Scroll reveals" },
+      "drift": { "$type": "duration", "$value": "9s", "$description": "Ambient floral float" }
+    },
+    "stagger": { "$type": "duration", "$value": "100ms", "$description": "Reveal stagger step (~80–120ms)" },
+    "scroll": {
+      "parallax-drift-max": { "$type": "dimension", "$value": "40px", "$description": "Max vertical drift for scroll-scrubbed parallax" },
+      "parallax-cover-scale": { "$type": "number", "$value": 1.15, "$description": "Pre-scale on clipped parallax images so edges never show" },
+      "ink-draw-mount": { "$type": "duration", "$value": "1600ms", "$description": "Hero-only timed FloralDivider ink-in; elsewhere the draw is scrubbed 1:1 with scroll" },
+      "scene-rise": { "$type": "dimension", "$value": "48px", "$description": "SceneFrame entry glide — section content settles up into place" },
+      "scene-exit": { "$type": "dimension", "$value": "16px", "$description": "SceneFrame exit release as a section leaves the viewport" }
+    }
+  }
+}

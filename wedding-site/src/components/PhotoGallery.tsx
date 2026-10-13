@@ -1,6 +1,7 @@
 "use client";
 
 import { FloralDivider } from "./Florals";
+import { SceneFrame } from "./ui/motion-primitives";
 import { useScrollReveal, useSectionLayout } from "./hooks";
 import ThumbnailCarousel from "./ui/thumbnail-carousel";
 
@@ -18,11 +19,12 @@ export function PhotoGallery() {
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(192,153,154,0.28),transparent_58%)]" />
 
+      <SceneFrame>
       <div className="section-header">
         <p className={`section-eyebrow text-rose-deep reveal ${isVisible ? "is-visible" : ""}`}>
           Moments we love
         </p>
-        <FloralDivider className={`mt-3 h-5 w-44 text-rose/60 reveal ${isVisible ? "is-visible" : ""}`} />
+        <FloralDivider draw="scroll" className="mt-3 h-7 w-52 text-rose/60" />
         <h2
           id="photo-gallery-title"
           className={`section-title mt-4 text-text reveal ${isVisible ? "is-visible" : ""}`}
@@ -48,6 +50,7 @@ export function PhotoGallery() {
           </div>
         </div>
       </div>
+      </SceneFrame>
     </section>
   );
 }

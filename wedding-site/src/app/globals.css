@@ -30,11 +30,9 @@
   --foreground: #4A3D3A;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
+/* No unlayered `*` reset here: Tailwind's preflight already zeroes margin/
+   padding inside @layer base. An unlayered reset would out-cascade every
+   utility class (mx-auto, p-*, mt-*…) and silently break all spacing. */
 
 html {
   scroll-behavior: smooth;

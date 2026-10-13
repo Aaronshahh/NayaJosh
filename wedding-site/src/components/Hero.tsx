@@ -1,5 +1,7 @@
 "use client";
 
+import { useRef, useState } from "react";
+import { motion, useMotionValueEvent, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useMountReveal, useViewport } from "./hooks";
 import { FloralDivider } from "./Florals";
 
@@ -8,41 +10,63 @@ export function Hero() {
   const { height } = useViewport();
   const reveal = isVisible ? "reveal is-visible" : "reveal";
 
+  // Exit choreography (design-system.md §8, scroll-linked motion): as the hero
+  // scrolls away, the photo lags behind, the date watermark rises faster, and
+  // the foreground settles out. 0 = hero filling the viewport, 1 = fully past.
+  const sectionRef = useRef<HTMLElement>(null);
+  const reduceMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end start"] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ["0%", "14%"]);
+  const dateY = useTransform(scrollYProgress, [0, 1], ["0%", "-130%"]);
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "-32%"]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  // The cue is a threshold, not a scrub: it vanishes the moment the guest starts moving.
+  const [scrolled, setScrolled] = useState(false);
+  useMotionValueEvent(scrollYProgress, "change", (v) => setScrolled(v > 0.05));
+
   return (
     <section
       id="hero"
+      ref={sectionRef}
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-6 text-center"
       style={{ minHeight: height ? `${height}px` : undefined }}
       aria-labelledby="hero-title"
     >
       {/* Background photo + dusty-mauve wash */}
-      <div className="absolute inset-0 z-0">
+      <motion.div className="absolute inset-0 z-0 will-change-transform" style={reduceMotion ? undefined : { y: bgY }}>
         <img src="/images/hero.jpeg" alt="Naya and Josh" className="h-full w-full object-cover" />
         {/* mauve tint */}
         <div className="absolute inset-0 bg-mauve/45 mix-blend-multiply" />
         {/* soft dusty gradient for legibility */}
         <div className="absolute inset-0 bg-gradient-to-b from-bg-dark/30 via-rose/20 to-bg-dark/55" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(58,46,52,0.45)_100%)]" />
-      </div>
+      </motion.div>
 
-      {/* Date watermark, anchored to section behind content */}
-      <div
-        className={`reveal ${isVisible ? "is-visible" : ""} pointer-events-none absolute inset-x-0 bottom-5 z-10 select-none px-6`}
-        style={{ transitionDelay: "1100ms" }}
+      {/* Date watermark, anchored to section behind content. The scrubbed rise
+          lives on this outer div — the inner div owns the CSS reveal, whose
+          transition on transform would otherwise swallow the scrub. */}
+      <motion.div
+        className="pointer-events-none absolute inset-x-0 bottom-5 z-10 select-none px-6 will-change-transform"
+        style={reduceMotion ? undefined : { y: dateY }}
         aria-hidden="true"
       >
-        <span className="block font-display text-[17vw] font-light leading-none tracking-[0.06em] text-text-light/12 lg:text-[11rem]">
-          10&nbsp;26&nbsp;2026
-        </span>
-      </div>
+        <div className={`reveal ${isVisible ? "is-visible" : ""}`} style={{ transitionDelay: "1100ms" }}>
+          <span className="block font-display text-[17vw] font-light leading-none tracking-[0.06em] text-text-light/12 lg:text-[11rem]">
+            06&nbsp;13&nbsp;2027
+          </span>
+        </div>
+      </motion.div>
 
       {/* Foreground content */}
-      <div className="relative z-20 flex flex-col items-center">
+      <motion.div
+        className="relative z-20 flex flex-col items-center"
+        style={reduceMotion ? undefined : { y: contentY, opacity: contentOpacity }}
+      >
         <p className={`${reveal} section-eyebrow text-text-light/90`} style={{ transitionDelay: "150ms" }}>
           We&rsquo;re getting married
         </p>
 
-        <FloralDivider className={`${reveal} mt-4 h-5 w-44 text-text-light/70 md:w-52`} />
+        <FloralDivider draw="mount" className="mt-4 h-7 w-48 text-text-light/70 md:w-56" />
 
         <h1
           id="hero-title"
@@ -55,9 +79,9 @@ export function Hero() {
         <div className={`${reveal} mt-8 flex flex-col items-center gap-4`} style={{ transitionDelay: "450ms" }}>
           <span className="h-px w-14 bg-blush/60" />
           <time className="flex flex-col items-center font-display text-text-light">
-            <span className="text-xs font-semibold uppercase tracking-[0.42em] md:text-sm">October</span>
-            <span className="my-1 text-6xl font-medium leading-none md:text-7xl">26</span>
-            <span className="text-xs font-semibold uppercase tracking-[0.42em] md:text-sm">2026</span>
+            <span className="text-xs font-semibold uppercase tracking-[0.42em] md:text-sm">June</span>
+            <span className="my-1 text-6xl font-medium leading-none md:text-7xl">13</span>
+            <span className="text-xs font-semibold uppercase tracking-[0.42em] md:text-sm">2027</span>
           </time>
           <span className="h-px w-14 bg-blush/60" />
         </div>
@@ -67,10 +91,14 @@ export function Hero() {
             Save the Date
           </a>
         </div>
-      </div>
+      </motion.div>
 
-      {/* Scroll cue */}
-      <div className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2">
+      {/* Scroll cue — gone as soon as the guest starts moving */}
+      <div
+        className={`absolute bottom-8 left-1/2 z-20 -translate-x-1/2 transition-opacity duration-300 ${
+          scrolled ? "pointer-events-none opacity-0" : "opacity-100"
+        }`}
+      >
         <a
           href="#rsvp"
           aria-label="Scroll to RSVP"

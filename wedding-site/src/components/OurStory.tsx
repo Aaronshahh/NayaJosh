@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
+import { useRef } from "react";
 import { FloralDivider } from "./Florals";
+import { Parallax, SceneFrame, ScrollDraw } from "./ui/motion-primitives";
 import { useScrollReveal, useSectionLayout } from "./hooks";
 
 const chapters = [
@@ -76,14 +78,16 @@ function StoryChapter({
             imageFirst ? "md:-rotate-1" : "md:rotate-1"
           }`}
         >
-          <Image
-            src={chapter.image}
-            alt={chapter.alt}
-            width={chapter.width}
-            height={chapter.height}
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className="h-auto w-full"
-          />
+          <Parallax clip drift={16} scale={1.12} className="rounded-[2px]">
+            <Image
+              src={chapter.image}
+              alt={chapter.alt}
+              width={chapter.width}
+              height={chapter.height}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="h-auto w-full"
+            />
+          </Parallax>
         </figure>
       </div>
 
@@ -107,10 +111,17 @@ function StoryChapter({
         </div>
       </div>
 
+      {/* Rail dot pops once the chapter reveals; outer span keeps the centering
+          translate out of reveal-scale's transform. */}
       <span
-        className="absolute left-1/2 top-1/2 z-10 hidden size-3 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-bg bg-rose shadow-[0_0_0_1px_rgba(168,123,126,0.45)] md:block"
+        className="pointer-events-none absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 md:block"
         aria-hidden="true"
-      />
+      >
+        <span
+          className={`reveal-scale ${isVisible ? "is-visible" : ""} block size-3 rounded-full border-[3px] border-bg bg-rose shadow-[0_0_0_1px_rgba(168,123,126,0.45)]`}
+          style={{ transitionDelay: "260ms" }}
+        />
+      </span>
     </article>
   );
 }
@@ -118,6 +129,7 @@ function StoryChapter({
 export function OurStory() {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.08, triggerOnce: true });
   const layout = useSectionLayout();
+  const chaptersRef = useRef<HTMLDivElement>(null);
 
   return (
     <section
@@ -129,11 +141,12 @@ export function OurStory() {
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(192,153,154,0.18),transparent_42%)]" />
 
+      <SceneFrame>
       <div className="section-header">
         <p className={`section-eyebrow text-rose-deep reveal ${isVisible ? "is-visible" : ""}`}>
           From then to now
         </p>
-        <FloralDivider className={`mt-3 h-5 w-44 text-rose/60 reveal ${isVisible ? "is-visible" : ""}`} />
+        <FloralDivider draw="scroll" className="mt-3 h-7 w-52 text-rose/60" />
         <h2
           id="our-story-title"
           className={`section-title mt-4 text-text reveal ${isVisible ? "is-visible" : ""}`}
@@ -150,16 +163,20 @@ export function OurStory() {
       </div>
 
       <div className="section-inner mt-20 md:mt-28" style={layout.inner}>
+        {/* Hairline track; the rose fill draws down in step with reading progress. */}
         <div
-          className="pointer-events-none absolute bottom-24 left-1/2 top-24 hidden w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-rose/35 to-transparent md:block"
+          className="pointer-events-none absolute bottom-24 left-1/2 top-24 hidden w-px -translate-x-1/2 bg-rose/15 md:block"
           aria-hidden="true"
-        />
-        <div className="relative space-y-24 md:space-y-36 lg:space-y-44">
+        >
+          <ScrollDraw targetRef={chaptersRef} className="bg-rose/45" />
+        </div>
+        <div ref={chaptersRef} className="relative space-y-24 md:space-y-36 lg:space-y-44">
           {chapters.map((chapter, index) => (
             <StoryChapter key={chapter.number} chapter={chapter} index={index} />
           ))}
         </div>
       </div>
+      </SceneFrame>
     </section>
   );
 }

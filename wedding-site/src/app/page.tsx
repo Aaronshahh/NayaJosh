@@ -44,7 +44,7 @@ function SiteContent() {
       <footer className="relative overflow-hidden border-t border-rose/15 bg-bg-dark px-6 py-16 text-center md:py-20">
         <FloralDivider className="mx-auto h-5 w-48 text-rose/40" />
         <p className="mt-8 select-none font-display text-5xl font-light tracking-[0.08em] text-text-light/10 md:text-7xl">
-          10&nbsp;26&nbsp;2026
+          06&nbsp;13&nbsp;2027
         </p>
         <p className="mt-6 font-display text-3xl italic text-rose md:text-4xl">Naya &amp; Josh</p>
         <p className="mt-3 text-[0.7rem] uppercase tracking-[0.2em] text-text-light/45">

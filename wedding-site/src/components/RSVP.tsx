@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState, FormEvent, type ReactNode } from "react";
-import { useScrollReveal, useSectionLayout } from "./hooks";
+import { useReducedMotion } from "framer-motion";
+import { useScrollReveal, useSectionLayout, NAV_HEIGHT } from "./hooks";
 import { FloralDivider, CornerSprig } from "./Florals";
+import { Collapse, Parallax, SceneFrame } from "./ui/motion-primitives";
 import { useAccess } from "./AccessProvider";
 import { EVENT_DETAILS, type EventKey } from "@/lib/events";
 
@@ -180,6 +182,7 @@ function PartySearch({ eventKey, token, selectedParty, onSelect }: PartySearchPr
 export function RSVP() {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.1 });
   const layout = useSectionLayout();
+  const reduceMotion = useReducedMotion();
   const { token, events: allowedEvents } = useAccess();
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [submitted, setSubmitted] = useState<Record<string, boolean>>({});
@@ -187,11 +190,24 @@ export function RSVP() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [warnings, setWarnings] = useState<Record<string, string>>({});
   const [selectedParties, setSelectedParties] = useState<Partial<Record<EventKey, InvitePartyOption>>>({});
+  const cardRefs = useRef<Partial<Record<EventKey, HTMLElement | null>>>({});
 
   const visibleEvents = allowedEvents.map((key) => EVENT_DETAILS[key]);
 
-  const toggleExpanded = (eventKey: string) =>
-    setExpanded((prev) => ({ ...prev, [eventKey]: !prev[eventKey] }));
+  const openForm = (eventKey: EventKey) => {
+    setExpanded((prev) => ({ ...prev, [eventKey]: true }));
+    // Let the height animation start, then bring the card's top into view so
+    // the opened form is actually on screen.
+    window.setTimeout(() => {
+      cardRefs.current[eventKey]?.scrollIntoView({
+        behavior: reduceMotion ? "auto" : "smooth",
+        block: "start",
+      });
+    }, 120);
+  };
+
+  const closeForm = (eventKey: EventKey) =>
+    setExpanded((prev) => ({ ...prev, [eventKey]: false }));
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>, eventKey: EventKey) => {
     e.preventDefault();
@@ -267,15 +283,16 @@ export function RSVP() {
 
   return (
     <section id="rsvp" ref={ref} className="section bg-bg" style={layout.section} aria-labelledby="rsvp-title">
-      <CornerSprig className="pointer-events-none absolute -left-6 top-10 h-72 w-52 text-sage/40" />
-      <CornerSprig className="pointer-events-none absolute -right-6 bottom-10 h-72 w-52 -scale-x-100 text-rose/30" />
+      <CornerSprig scrub className="pointer-events-none absolute -left-6 top-10 h-72 w-52 text-sage/40" />
+      <CornerSprig scrub className="pointer-events-none absolute -right-6 bottom-10 h-72 w-52 -scale-x-100 text-rose/30" />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(227,209,203,0.4),transparent_60%)]" />
 
+      <SceneFrame>
       <div className="section-header">
         <p className={`section-eyebrow text-rose-deep reveal ${isVisible ? "is-visible" : ""}`}>
           Together with their families
         </p>
-        <FloralDivider className={`mt-3 h-5 w-44 text-rose/60 reveal ${isVisible ? "is-visible" : ""}`} />
+        <FloralDivider draw="scroll" className="mt-3 h-7 w-52 text-rose/60" />
         <h2
           id="rsvp-title"
           className={`section-title mt-4 text-text reveal ${isVisible ? "is-visible" : ""}`}
@@ -296,30 +313,36 @@ export function RSVP() {
           <p className="text-center text-text-muted">No RSVP events are available for this invitation.</p>
         ) : (
           <div
-            className={`grid w-full max-w-5xl justify-center gap-7 ${
+            className={`grid w-full max-w-5xl justify-center gap-7 md:items-start ${
               visibleEvents.length > 1 ? "md:grid-cols-2 lg:gap-9" : ""
             }`}
           >
             {visibleEvents.map((event, index) => (
               <article
                 key={event.key}
+                ref={(node) => {
+                  cardRefs.current[event.key] = node;
+                }}
                 className={`card-light w-full max-w-[30rem] overflow-hidden ${index === 0 ? "reveal-left" : "reveal-right"} ${
                   isVisible ? "is-visible" : ""
                 }`}
-                style={{ transitionDelay: `${index * 120}ms` }}
+                style={{ transitionDelay: `${index * 120}ms`, scrollMarginTop: NAV_HEIGHT + 16 }}
               >
                 <div
-                  className={`relative overflow-hidden transition-all duration-500 ${
-                    expanded[event.key] ? "h-44" : "h-80 md:h-96"
+                  className={`relative overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                    expanded[event.key] ? "h-44" : "h-80 md:h-[28rem]"
                   }`}
                 >
-                  <img
-                    src={event.image}
-                    alt=""
-                    className={`h-full w-full object-cover transition-opacity duration-500 ${
-                      expanded[event.key] ? "opacity-60" : "opacity-100"
-                    }`}
-                  />
+                  {/* drift sized to the collapsed (h-44) state so edges never show */}
+                  <Parallax drift={12} scale={1.14} className="absolute inset-0" innerClassName="h-full w-full">
+                    <img
+                      src={event.image}
+                      alt=""
+                      className={`h-full w-full object-cover transition-opacity duration-500 ${
+                        expanded[event.key] ? "opacity-60" : "opacity-100"
+                      }`}
+                    />
+                  </Parallax>
                   <div
                     className={`absolute inset-0 transition-colors duration-500 ${
                       expanded[event.key] ? "bg-bg/40" : "bg-transparent"
@@ -337,23 +360,40 @@ export function RSVP() {
                 </div>
 
                 <div className="p-7 md:p-9">
-                  {!expanded[event.key] ? (
-                    <button
-                      type="button"
-                      onClick={() => toggleExpanded(event.key)}
-                      className="btn-primary w-full"
-                      aria-expanded={false}
-                      aria-controls={`rsvp-form-${event.key}`}
-                    >
-                      RSVP
-                    </button>
-                  ) : (
-                    <div id={`rsvp-form-${event.key}`} className="animate-scale-in">
-                      <p className="mb-7 leading-relaxed text-text-muted">{event.description}</p>
-                      <p className="mb-6 text-sm text-text-muted">
-                        {event.date} · {event.time} · {event.location}
-                      </p>
+                  <p className="leading-relaxed text-text-muted">{event.description}</p>
+                  <div className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                    <p className="text-sm text-text-muted">
+                      {event.date} · {event.time} · {event.location}
+                    </p>
+                    {expanded[event.key] && (
+                      <button
+                        type="button"
+                        onClick={() => closeForm(event.key)}
+                        aria-expanded={true}
+                        aria-controls={`rsvp-form-${event.key}`}
+                        className="ml-auto text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-rose-deep transition-colors duration-200 hover:text-rose"
+                      >
+                        Close
+                      </button>
+                    )}
+                  </div>
 
+                  <Collapse open={!expanded[event.key]}>
+                    <div className="pt-6">
+                      <button
+                        type="button"
+                        onClick={() => openForm(event.key)}
+                        className="btn-primary w-full"
+                        aria-expanded={false}
+                        aria-controls={`rsvp-form-${event.key}`}
+                      >
+                        RSVP
+                      </button>
+                    </div>
+                  </Collapse>
+
+                  <Collapse open={Boolean(expanded[event.key])} id={`rsvp-form-${event.key}`}>
+                    <div className="pt-7">
                       {submitted[event.key] ? (
                         <div className="rounded-[3px] border border-rose/30 bg-rose/10 p-4 animate-scale-in" role="status">
                           <p className="text-center font-medium text-rose-deep">
@@ -506,13 +546,14 @@ export function RSVP() {
                         </form>
                       )}
                     </div>
-                  )}
+                  </Collapse>
                 </div>
               </article>
             ))}
           </div>
         )}
       </div>
+      </SceneFrame>
     </section>
   );
 }
