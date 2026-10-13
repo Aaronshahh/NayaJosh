@@ -22,8 +22,8 @@ function sign(payloadB64: string) {
 
 export function resolvePasswordRole(password: string): AccessRole | null {
   const normalized = password.trim();
-  const full = (process.env.PASSWORD_FULL ?? "bing bong").trim();
-  const wedding = (process.env.PASSWORD_WEDDING ?? "bing").trim();
+  const full = (process.env.PASSWORD_FULL ?? "nandj").trim();
+  const wedding = (process.env.PASSWORD_WEDDING ?? "nj2027").trim();
   const admin = (process.env.PASSWORD_ADMIN ?? "admin").trim();
 
   if (normalized === full) return "full";
