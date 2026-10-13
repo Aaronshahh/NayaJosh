@@ -13,7 +13,7 @@ export function Gifts() {
     <section
       id="gifts"
       ref={ref}
-      className="relative w-full overflow-hidden bg-bg py-24 md:py-32"
+      className="relative w-full overflow-hidden bg-bg py-16 md:py-24"
       style={{ scrollMarginTop: layout.navHeight }}
       aria-labelledby="gifts-title"
     >
@@ -32,7 +32,7 @@ export function Gifts() {
               isVisible ? "is-visible" : ""
             }`}
           >
-            No boxed gifts
+            With Love and Thanks
           </p>
           <div className="flex w-full justify-center">
             <FloralDivider draw="scroll" className="mt-3 h-7 w-48 text-rose/55" />

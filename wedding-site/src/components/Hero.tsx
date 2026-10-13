@@ -34,7 +34,11 @@ export function Hero() {
     >
       {/* Background photo + dusty-mauve wash */}
       <motion.div className="absolute inset-0 z-0 will-change-transform" style={reduceMotion ? undefined : { y: bgY }}>
-        <img src="/images/hero.jpeg" alt="Naya and Josh" className="h-full w-full object-cover" />
+        <img
+          src="/images/hero-proposal.jpg"
+          alt="Josh proposing to Naya in a candlelit wine cellar scattered with rose petals"
+          className="h-full w-full object-cover"
+        />
         {/* mauve tint */}
         <div className="absolute inset-0 bg-mauve/45 mix-blend-multiply" />
         {/* soft dusty gradient for legibility */}

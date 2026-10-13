@@ -5,13 +5,12 @@ import { useScrollNav, useViewport } from "./hooks";
 
 const leftLinks = [
   { href: "#our-story", label: "Story" },
-  { href: "#photo-gallery", label: "Photos" },
   { href: "#rsvp", label: "RSVP" },
   { href: "#celebrations", label: "Events" },
+  { href: "#travel", label: "Travel" },
 ];
 
 const rightLinks = [
-  { href: "#travel", label: "Travel" },
   { href: "#schedule", label: "Schedule" },
   { href: "#gifts", label: "Gifts" },
   { href: "#qa", label: "Q&A" },

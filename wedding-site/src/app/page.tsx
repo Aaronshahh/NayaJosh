@@ -3,7 +3,6 @@
 import { Navigation } from "@/components/Navigation";
 import { Hero } from "@/components/Hero";
 import { OurStory } from "@/components/OurStory";
-import { PhotoGallery } from "@/components/PhotoGallery";
 import { RSVP } from "@/components/RSVP";
 import { EventGuide } from "@/components/EventGuide";
 import { Travel } from "@/components/Travel";
@@ -33,7 +32,6 @@ function SiteContent() {
       <main className="pt-0">
         <Hero />
         <OurStory />
-        <PhotoGallery />
         <RSVP />
         <EventGuide />
         <Travel />

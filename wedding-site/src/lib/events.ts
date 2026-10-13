@@ -28,7 +28,7 @@ export const EVENT_DETAILS: Record<
     key: "wedding",
     name: "Indian Wedding",
     date: "Sunday, June 13, 2027",
-    time: "2:00 PM – 12:00 AM EDT",
+    time: "3:00 PM – 12:00 AM EDT",
     location: "Mississauga Convention Centre, Mississauga, ON",
     description:
       "A ceremony filled with colour, music, family, and tradition, followed by cocktails and the reception.",

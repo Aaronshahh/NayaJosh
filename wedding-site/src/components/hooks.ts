@@ -148,10 +148,11 @@ export function useSectionLayout() {
   // Centered content column width.
   const maxWidth = width === 0 ? 1152 : width < 768 ? 600 : width < 1280 ? 960 : 1152;
 
-  // Top-aligned sections need a smaller top offset; keep more breathing room
-  // at the bottom for tall card/form content.
-  const topPad = height === 0 ? 8 : Math.max(8, Math.round(height * 0.006));
-  const bottomPad = height === 0 ? 112 : Math.max(96, Math.round(height * 0.085)) + NAV_HEIGHT / 2;
+  // One shared top offset for every section header (headers no longer pull
+  // themselves up with a negative margin), with a trimmed bottom buffer so
+  // sections don't linger past their content.
+  const topPad = height === 0 ? 48 : width < 768 ? 32 : Math.max(44, Math.round(height * 0.058));
+  const bottomPad = height === 0 ? 84 : Math.max(56, Math.round(height * 0.055)) + NAV_HEIGHT / 2;
 
   // Shared viewport-relative rhythm for trailing blocks (e.g. Q&A contact card).
   const blockGap = height === 0 ? 80 : Math.max(72, Math.round(height * 0.09));

@@ -101,8 +101,8 @@ const events: Array<{
         label: "When",
         value: (
           <>
-            Sunday, June 13, 2027 · 2:00 PM – 12:00 AM EDT ·{" "}
-            <InlineLink href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Naya+%26+Josh+%E2%80%94+Indian+Wedding&dates=20270613T140000/20270614T000000&ctz=America/Toronto&location=Mississauga+Convention+Centre%2C+75+Derry+Road+West%2C+Mississauga%2C+ON+L5W+1G3">
+            Sunday, June 13, 2027 · 3:00 PM – 12:00 AM EDT ·{" "}
+            <InlineLink href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Naya+%26+Josh+%E2%80%94+Indian+Wedding&dates=20270613T150000/20270614T000000&ctz=America/Toronto&location=Mississauga+Convention+Centre%2C+75+Derry+Road+West%2C+Mississauga%2C+ON+L5W+1G3">
               Add to calendar
             </InlineLink>
           </>
@@ -125,7 +125,7 @@ export function EventGuide() {
       id="celebrations"
       ref={ref}
       className="section bg-bg-alt"
-      style={{ ...layout.section, paddingTop: "clamp(6rem, 10vw, 9rem)" }}
+      style={layout.section}
       aria-labelledby="celebrations-title"
     >
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_15%_25%,rgba(194,168,131,0.18),transparent_28%),radial-gradient(circle_at_90%_75%,rgba(192,153,154,0.2),transparent_30%)]" />

@@ -472,7 +472,7 @@ export function Travel() {
           <div className={`reveal ${isVisible ? "is-visible" : ""}`} style={{ transitionDelay: "360ms" }}>
             <TabPanel value="stay" activeValue={activeCategory} idBase="travel" className="mt-10">
               <p className="mx-auto max-w-3xl border-l border-rose/50 bg-white/[0.04] py-4 pl-6 pr-5 text-sm leading-relaxed text-text-light/70">
-                <span className="font-semibold text-text-light">Booking opens soon.</span> We&rsquo;re
+                <span className="font-semibold text-text-light">Booking opens soon. </span> We&rsquo;re
                 finalizing group rates with each hotel — the exact discount codes and booking links
                 will be posted here shortly. Checkout and booking aren&rsquo;t available quite yet;
                 for now, this is a preview of the hotels we&rsquo;ve arranged.

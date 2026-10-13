@@ -363,7 +363,8 @@ export function RSVP() {
                   <p className="leading-relaxed text-text-muted">{event.description}</p>
                   <div className="mt-3 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
                     <p className="text-sm text-text-muted">
-                      {event.date} · {event.time} · {event.location}
+                      {event.date} · {event.time}
+                      <span className="block">{event.location}</span>
                     </p>
                     {expanded[event.key] && (
                       <button
