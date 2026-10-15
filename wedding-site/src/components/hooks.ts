@@ -27,16 +27,32 @@ export function useScrollReveal(options: UseScrollRevealOptions = {}) {
       return;
     }
 
+    // `threshold` is meant as "this fraction of the element is on screen", but
+    // for elements taller than the viewport that ratio is capped at
+    // viewport/element height and can become unreachable — e.g. the Q&A
+    // section grows past the cap as <details> answers open, which flipped the
+    // whole section to hidden mid-read. Measure against whichever is smaller
+    // (element or root) instead, sampling a dense threshold list so the
+    // observer still fires near the boundary.
+    const thresholds = Array.from({ length: 51 }, (_, i) => i / 50);
+
     const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
+      (entries) => {
+        const entry = entries[entries.length - 1];
+        const rootHeight = entry.rootBounds?.height ?? window.innerHeight;
+        const requiredHeight =
+          Math.min(entry.boundingClientRect.height, rootHeight) * threshold;
+        const isVisibleNow =
+          entry.isIntersecting && entry.intersectionRect.height >= requiredHeight;
+
+        if (isVisibleNow) {
           setIsVisible(true);
           if (triggerOnce) observer.unobserve(element);
         } else if (!triggerOnce) {
           setIsVisible(false);
         }
       },
-      { threshold, rootMargin }
+      { threshold: thresholds, rootMargin }
     );
 
     observer.observe(element);
