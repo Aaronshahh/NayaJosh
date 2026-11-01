@@ -21,7 +21,6 @@ type Hotel = {
   phone: string;
   phoneHref: string;
   amenities: string[];
-  website: string;
   groupBookingUrl: string;
 };
 
@@ -40,7 +39,6 @@ const hotels: Hotel[] = [
     phone: "(905) 564-5152",
     phoneHref: "tel:+19055645152",
     amenities: ["Free breakfast", "Free Wi-Fi", "Flat-screen TVs", "Kitchen rooms available"],
-    website: "https://www.choicehotels.com/en-ca/ontario/mississauga/comfort-inn-hotels/cn900",
     groupBookingUrl: "https://www.choicehotels.com/reservations/groups/BB86I4",
   },
   {
@@ -57,7 +55,6 @@ const hotels: Hotel[] = [
     phone: "(905) 795-1011",
     phoneHref: "tel:+19057951011",
     amenities: ["Free hot buffet breakfast", "Free Wi-Fi", "Free parking", "Business centre"],
-    website: "https://www.bestwestern.com/en_US/book/hotel-details.66130.html",
     groupBookingUrl: "https://www.bestwestern.com/en_US/book/hotel-rooms.66130.html?groupId=T14VR9D3",
   },
   {
@@ -74,7 +71,6 @@ const hotels: Hotel[] = [
     phone: "(905) 564-5529",
     phoneHref: "tel:+19055645529",
     amenities: ["Full kitchen in every suite", "Free hot breakfast", "Free parking", "Indoor pool & gym"],
-    website: "https://www.hilton.com/en/hotels/ytohwhw-homewood-suites-toronto-mississauga/",
     groupBookingUrl: "https://group.homewood-suites.com/ysgdo5",
   },
 ];
@@ -327,15 +323,6 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
               className={`font-semibold text-rose ${externalLinkClass}`}
             >
               Book our group rate
-              <ExternalArrow />
-            </a>
-            <a
-              href={hotel.website}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`text-text-light/80 ${externalLinkClass}`}
-            >
-              Hotel website
               <ExternalArrow />
             </a>
             <a

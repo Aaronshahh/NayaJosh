@@ -28,31 +28,6 @@ export function AccessProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(null);
   const [events, setEvents] = useState<EventKey[]>([]);
 
-  useEffect(() => {
-    try {
-      const raw = sessionStorage.getItem(STORAGE_KEY);
-      if (raw) {
-        const parsed = JSON.parse(raw) as StoredSession;
-        if (parsed?.token && parsed?.role) {
-          setRole(parsed.role);
-          setToken(parsed.token);
-          setEvents(parsed.events ?? []);
-        }
-      }
-    } catch {
-      sessionStorage.removeItem(STORAGE_KEY);
-    } finally {
-      setReady(true);
-    }
-  }, []);
-
-  const lock = useCallback(() => {
-    sessionStorage.removeItem(STORAGE_KEY);
-    setRole(null);
-    setToken(null);
-    setEvents([]);
-  }, []);
-
   const unlock = useCallback(async (password: string) => {
     const response = await fetch("/api/unlock", {
       method: "POST",
@@ -81,6 +56,49 @@ export function AccessProvider({ children }: { children: ReactNode }) {
     setToken(session.token);
     setEvents(session.events);
     return null;
+  }, []);
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as StoredSession;
+        if (parsed?.token && parsed?.role) {
+          setRole(parsed.role);
+          setToken(parsed.token);
+          setEvents(parsed.events ?? []);
+          setReady(true);
+          return;
+        }
+      }
+    } catch {
+      sessionStorage.removeItem(STORAGE_KEY);
+    }
+
+    // QR codes on the invitations link to /?code=<password>. Strip the code
+    // from the address bar before trying it so it isn't left in history.
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+    if (code) {
+      params.delete("code");
+      const query = params.toString();
+      window.history.replaceState(
+        null,
+        "",
+        `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`
+      );
+      void unlock(code).finally(() => setReady(true));
+      return;
+    }
+
+    setReady(true);
+  }, [unlock]);
+
+  const lock = useCallback(() => {
+    sessionStorage.removeItem(STORAGE_KEY);
+    setRole(null);
+    setToken(null);
+    setEvents([]);
   }, []);
 
   const value = useMemo(
