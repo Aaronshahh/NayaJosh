@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import type { EventKey } from "@/lib/events";
+import { useAccess } from "./AccessProvider";
 import { useScrollReveal, useSectionLayout } from "./hooks";
 import { FloralDivider, CornerSprig } from "./Florals";
 import { SectionTabs, TabPanel, Collapse, Chevron, SceneFrame } from "./ui/motion-primitives";
@@ -13,6 +15,7 @@ type ScheduleEvent = {
 
 type ScheduleDay = {
   key: string;
+  eventKey: EventKey;
   tabDate: string;
   tabTitle: string;
   date: string;
@@ -29,6 +32,7 @@ type ScheduleDay = {
 const scheduleItems: ScheduleDay[] = [
   {
     key: "mehendi",
+    eventKey: "sangeet",
     tabDate: "Sat · June 12",
     tabTitle: "Mehendi",
     date: "Saturday, June 12, 2027",
@@ -56,6 +60,7 @@ const scheduleItems: ScheduleDay[] = [
   },
   {
     key: "wedding",
+    eventKey: "wedding",
     tabDate: "Sun · June 13",
     tabTitle: "Wedding Day",
     date: "Sunday, June 13, 2027",
@@ -119,7 +124,16 @@ const scheduleItems: ScheduleDay[] = [
 export function Schedule() {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.08 });
   const layout = useSectionLayout();
+  const { events } = useAccess();
+  // Wedding-only guests see just the wedding day; an empty event list
+  // (e.g. admin) falls back to the full schedule.
+  const visibleDays = events.length
+    ? scheduleItems.filter((day) => events.includes(day.eventKey))
+    : scheduleItems;
   const [activeDay, setActiveDay] = useState(scheduleItems[0].key);
+  const resolvedActiveDay = visibleDays.some((day) => day.key === activeDay)
+    ? activeDay
+    : visibleDays[0]?.key;
   // First event of each day starts open; the rest are a tap away.
   const [openEvents, setOpenEvents] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(scheduleItems.map((day) => [`${day.key}-0`, true]))
@@ -136,7 +150,7 @@ export function Schedule() {
       <SceneFrame>
       <div className="section-header">
         <p className={`section-eyebrow text-rose-deep reveal ${isVisible ? "is-visible" : ""}`}>
-          Two days of celebration
+          {visibleDays.length > 1 ? "Two days of celebration" : "A day of celebration"}
         </p>
         <FloralDivider draw="scroll" className="mt-3 h-7 w-52 text-rose/60" />
         <h2
@@ -150,6 +164,7 @@ export function Schedule() {
 
       <div className="section-inner" style={layout.inner}>
         <div className="mx-auto w-full max-w-3xl">
+          {visibleDays.length > 1 && (
           <div
             className={`flex justify-center reveal ${isVisible ? "is-visible" : ""}`}
             style={{ transitionDelay: "200ms" }}
@@ -157,9 +172,9 @@ export function Schedule() {
             <SectionTabs
               idBase="schedule"
               aria-label="Celebration days"
-              value={activeDay}
+              value={resolvedActiveDay}
               onChange={setActiveDay}
-              tabs={scheduleItems.map((day) => ({
+              tabs={visibleDays.map((day) => ({
                 value: day.key,
                 label: (
                   <>
@@ -174,10 +189,11 @@ export function Schedule() {
               }))}
             />
           </div>
+          )}
 
           <div className={`reveal ${isVisible ? "is-visible" : ""}`} style={{ transitionDelay: "280ms" }}>
-            {scheduleItems.map((day) => (
-              <TabPanel key={day.key} value={day.key} activeValue={activeDay} idBase="schedule" className="mt-10">
+            {visibleDays.map((day) => (
+              <TabPanel key={day.key} value={day.key} activeValue={resolvedActiveDay} idBase="schedule" className="mt-10">
                 <h3 className="text-center font-display text-3xl font-medium text-text md:text-4xl">
                   {day.headline}
                 </h3>
