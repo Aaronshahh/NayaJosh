@@ -82,10 +82,10 @@ const slides: Slide[] = [
     caption: [
       "Born in Ottawa, Ontario, to Chantal and David Parent, Joshua grew up in the small town of Almonte, surrounded by family and friends. He is grateful for the love and support of those closest to him and is excited to begin this next chapter with Naya, bringing their families together as they build a future filled with love and happiness.",
     ],
-    featured: "David (Father), Joshua, and David (Grandfather)",
+    featured: "DJ (Father), Joshua, and David (Grandfather)",
     layout: "spread",
     dense: true,
-    photos: [{ src: joshGolf, alt: "Josh golfing with his father David and his grandfather David" }],
+    photos: [{ src: joshGolf, alt: "Josh golfing with his father DJ and his grandfather David" }],
   },
   {
     id: "meet-naya",
@@ -148,7 +148,7 @@ const slides: Slide[] = [
     id: "families-together",
     kicker: "Family",
     caption: ["And eventually, bringing their families together."],
-    featured: "Rameshwar (Dada), David (Father), Megan (Step-Mother), Naya, Joshua, Swati (Mother)",
+    featured: "Rameshwar (Dada), DJ (Father), Megan (Step-Mother), Naya, Joshua, Swati (Mother)",
     layout: "spread",
     photos: [{ src: familiesTogether, alt: "Both families gathered together in the living room" }],
   },

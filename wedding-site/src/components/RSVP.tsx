@@ -555,6 +555,20 @@ export function RSVP() {
           </div>
         )}
       </div>
+
+      <div
+        className={`flex w-full justify-center reveal ${isVisible ? "is-visible" : ""}`}
+        style={{ marginTop: layout.blockGap, paddingLeft: layout.gutter, paddingRight: layout.gutter }}
+      >
+        <aside className="card-light w-full max-w-xl px-8 py-7 text-center" aria-label="RSVP deadline">
+          <p className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-text-muted">
+            Deadline to RSVP
+          </p>
+          <p className="mt-3 font-display text-3xl font-medium italic text-rose-deep md:text-4xl">
+            February 1st, 2027
+          </p>
+        </aside>
+      </div>
       </SceneFrame>
     </section>
   );

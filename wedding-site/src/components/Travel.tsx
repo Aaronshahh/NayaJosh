@@ -22,6 +22,7 @@ type Hotel = {
   phoneHref: string;
   amenities: string[];
   website: string;
+  groupBookingUrl: string;
 };
 
 const hotels: Hotel[] = [
@@ -40,6 +41,7 @@ const hotels: Hotel[] = [
     phoneHref: "tel:+19055645152",
     amenities: ["Free breakfast", "Free Wi-Fi", "Flat-screen TVs", "Kitchen rooms available"],
     website: "https://www.choicehotels.com/en-ca/ontario/mississauga/comfort-inn-hotels/cn900",
+    groupBookingUrl: "https://www.choicehotels.com/reservations/groups/BB86I4",
   },
   {
     key: "glo-best-western",
@@ -56,6 +58,7 @@ const hotels: Hotel[] = [
     phoneHref: "tel:+19057951011",
     amenities: ["Free hot buffet breakfast", "Free Wi-Fi", "Free parking", "Business centre"],
     website: "https://www.bestwestern.com/en_US/book/hotel-details.66130.html",
+    groupBookingUrl: "https://www.bestwestern.com/en_US/book/hotel-rooms.66130.html?groupId=T14VR9D3",
   },
   {
     key: "homewood-suites",
@@ -72,6 +75,7 @@ const hotels: Hotel[] = [
     phoneHref: "tel:+19055645529",
     amenities: ["Full kitchen in every suite", "Free hot breakfast", "Free parking", "Indoor pool & gym"],
     website: "https://www.hilton.com/en/hotels/ytohwhw-homewood-suites-toronto-mississauga/",
+    groupBookingUrl: "https://group.homewood-suites.com/ysgdo5",
   },
 ];
 
@@ -317,6 +321,15 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
           </p>
           <p className="mt-4 flex flex-wrap gap-x-6 gap-y-2 text-sm">
             <a
+              href={hotel.groupBookingUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={`font-semibold text-rose ${externalLinkClass}`}
+            >
+              Book our group rate
+              <ExternalArrow />
+            </a>
+            <a
               href={hotel.website}
               target="_blank"
               rel="noopener noreferrer"
@@ -472,10 +485,10 @@ export function Travel() {
           <div className={`reveal ${isVisible ? "is-visible" : ""}`} style={{ transitionDelay: "360ms" }}>
             <TabPanel value="stay" activeValue={activeCategory} idBase="travel" className="mt-10">
               <p className="mx-auto max-w-3xl border-l border-rose/50 bg-white/[0.04] py-4 pl-6 pr-5 text-sm leading-relaxed text-text-light/70">
-                <span className="font-semibold text-text-light">Booking opens soon. </span> We&rsquo;re
-                finalizing group rates with each hotel — the exact discount codes and booking links
-                will be posted here shortly. Checkout and booking aren&rsquo;t available quite yet;
-                for now, this is a preview of the hotels we&rsquo;ve arranged.
+                <span className="font-semibold text-text-light">Group rates are live. </span>
+                We&rsquo;ve arranged discounted room blocks at all three hotels below. To receive our
+                special wedding rate, please book through the &ldquo;Book our group rate&rdquo; links —
+                only these links will get you the special rates.
               </p>
               <motion.ul
                 role="list"

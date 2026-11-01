@@ -4,7 +4,19 @@ import { useScrollReveal, useSectionLayout } from "./hooks";
 import { FloralDivider } from "./Florals";
 import { SceneFrame } from "./ui/motion-primitives";
 
-const faqCategories = [
+type Faq = {
+  question: string;
+  answer: string[];
+  image?: { src: string; alt: string };
+};
+
+type FaqCategory = {
+  id: string;
+  title: string;
+  questions: Faq[];
+};
+
+const faqCategories: FaqCategory[] = [
   {
     id: "before-the-wedding",
     title: "Before the Wedding",
@@ -38,6 +50,10 @@ const faqCategories = [
           "You do not need to purchase traditional Indian clothing for our wedding. Western formalwear is absolutely welcome! We encourage bright, festive colours and kindly ask that guests avoid all-black, all-white, or black-and-white outfits.",
           "For those who would like to add a touch of Indian tradition, traditional jewelry, bindis, and henna will be available to enjoy.",
         ],
+        image: {
+          src: "/images/attire-guide.jpg",
+          alt: "Dress guide: please avoid all-white, all-black, or black-and-white-only outfits; coloured suits and black suits with coloured shirts are welcome",
+        },
       },
       {
         question: "Is there a gift registry?",
@@ -140,7 +156,7 @@ const faqCategories = [
       {
         question: "Who should I contact on the wedding day if I have a question?",
         answer: [
-          "To help us stay focused on enjoying the day, please contact Swati or Rajiv, Sarah Parent at +1 (613) 795-1106, or Matt Reid at +1 (613) 581-2825 with any questions or for assistance.",
+          "To help us stay focused on enjoying the day, please contact Swati or Rajiv, or Matt Reid at +1 (613) 581-2825 with any questions or for assistance.",
         ],
       },
     ],
@@ -195,10 +211,10 @@ export function QA() {
           anything we&rsquo;ve missed or if you need any clarification, please don&rsquo;t hesitate to
           message either of us, email us at{" "}
           <a
-            href="mailto:joshandnayaparent@gmail.com"
+            href="mailto:njparent21@gmail.com"
             className="underline decoration-rose/50 underline-offset-4 transition-colors duration-300 hover:text-rose focus:outline-none focus-visible:ring-2 focus-visible:ring-rose"
           >
-            joshandnayaparent@gmail.com
+            njparent21@gmail.com
           </a>
           , or contact Swati &amp; Rajiv. We&rsquo;d be happy to help!
         </p>
@@ -284,6 +300,14 @@ export function QA() {
                           {faq.answer.map((paragraph) => (
                             <p key={paragraph}>{paragraph}</p>
                           ))}
+                          {faq.image && (
+                            <img
+                              src={faq.image.src}
+                              alt={faq.image.alt}
+                              loading="lazy"
+                              className="w-full rounded-[2px] border border-white/10"
+                            />
+                          )}
                         </div>
                       </details>
                     </div>
@@ -327,24 +351,15 @@ export function QA() {
             <li className="grid gap-1 sm:grid-cols-[10rem_1fr] sm:gap-6">
               <span className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-rose">Email</span>
               <a
-                href="mailto:joshandnayaparent@gmail.com"
+                href="mailto:njparent21@gmail.com"
                 className="text-text-light/75 transition-colors hover:text-rose focus:outline-none focus-visible:ring-2 focus-visible:ring-rose"
               >
-                joshandnayaparent@gmail.com
+                njparent21@gmail.com
               </a>
             </li>
             <li className="grid gap-1 sm:grid-cols-[10rem_1fr] sm:gap-6">
               <span className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-rose">Swati &amp; Rajiv</span>
               <span className="text-text-light/75">WhatsApp</span>
-            </li>
-            <li className="grid gap-1 sm:grid-cols-[10rem_1fr] sm:gap-6">
-              <span className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-rose">Sarah Parent</span>
-              <a
-                href="tel:+16137951106"
-                className="text-text-light/75 transition-colors hover:text-rose focus:outline-none focus-visible:ring-2 focus-visible:ring-rose"
-              >
-                +1 (613) 795-1106
-              </a>
             </li>
             <li className="grid gap-1 sm:grid-cols-[10rem_1fr] sm:gap-6">
               <span className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-rose">Matt Reid</span>

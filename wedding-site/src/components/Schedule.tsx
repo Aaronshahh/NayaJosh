@@ -21,6 +21,7 @@ type ScheduleDay = {
   attire?: {
     label: string;
     paragraphs: string[];
+    image?: { src: string; alt: string };
   };
   events: ScheduleEvent[];
 };
@@ -38,6 +39,10 @@ const scheduleItems: ScheduleDay[] = [
       paragraphs: [
         "Mehndi is a celebration of colour, joy, and togetherness! We encourage guests to embrace bright, festive colours and have fun with their outfits. As a small request, we kindly ask that guests avoid all-white or all-black attire.",
       ],
+      image: {
+        src: "/images/attire-guide.jpg",
+        alt: "Dress guide: please avoid all-white, all-black, or black-and-white-only outfits; coloured suits and black suits with coloured shirts are welcome",
+      },
     },
     events: [
       {
@@ -62,6 +67,10 @@ const scheduleItems: ScheduleDay[] = [
         "We encourage guests to embrace festive colours and kindly ask that all-black, all-white, and black-and-white attire be avoided. For more details, please refer to our Dress Guide.",
         "For anyone wearing Western attire who would like to add a touch of Indian tradition, we'll have a selection of traditional jewelry and bindis available to enjoy.",
       ],
+      image: {
+        src: "/images/attire-guide.jpg",
+        alt: "Dress guide: please avoid all-white, all-black, or black-and-white-only outfits; coloured suits and black suits with coloured shirts are welcome",
+      },
     },
     events: [
       {
@@ -238,6 +247,14 @@ export function Schedule() {
                         <p key={paragraph.slice(0, 40)}>{paragraph}</p>
                       ))}
                     </div>
+                    {day.attire.image && (
+                      <img
+                        src={day.attire.image.src}
+                        alt={day.attire.image.alt}
+                        loading="lazy"
+                        className="mt-5 w-full rounded-[2px] border border-rose/20"
+                      />
+                    )}
                   </div>
                 )}
               </TabPanel>
