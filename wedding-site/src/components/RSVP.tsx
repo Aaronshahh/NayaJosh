@@ -304,7 +304,8 @@ export function RSVP() {
           className={`section-subtitle text-text-muted reveal ${isVisible ? "is-visible" : ""}`}
           style={{ transitionDelay: "200ms" }}
         >
-          Please let us know if you can join us for each celebration. We&rsquo;d love to have you there.
+          Please let us know by February 1, 2027 if you can join us for each celebration. We&rsquo;d
+          love to have you there.
         </p>
       </div>
 

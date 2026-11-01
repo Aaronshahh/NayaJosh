@@ -86,6 +86,8 @@ values
   ('sangeet', 24, 'Dr. Utpal Anand', array['Dr. Utpal Anand'], 2),
   ('sangeet', 25, 'Sanjay and Sabita Sah', array['Sanjay Sah', 'Sabita Sah'], 4),
   ('sangeet', 26, 'Anand Mishra', array['Anand Mishra'], 3),
+  ('sangeet', 27, 'Rameshwar Shah', array['Rameshwar Shah'], 1),
+  ('sangeet', 28, 'Gita Saha', array['Gita Saha'], 1),
   ('wedding', 1, 'Abdesh Jha', array['Abdesh Jha'], 5),
   ('wedding', 2, 'Bilal and Sirin', array['Bilal', 'Sirin'], 5),
   ('wedding', 3, 'Dr. Ted Saha', array['Dr. Ted Saha'], 2),
@@ -116,7 +118,9 @@ values
   ('wedding', 28, 'Dr. Satyendra Mandal', array['Dr. Satyendra Mandal'], 2),
   ('wedding', 29, 'Sanjay and Sabita Sah', array['Sanjay Sah', 'Sabita Sah'], 4),
   ('wedding', 30, 'Anand Mishra', array['Anand Mishra'], 3),
-  ('wedding', 31, 'Burhan and Shookri', array['Burhan', 'Shookri'], 2)
+  ('wedding', 31, 'Burhan and Shookri', array['Burhan', 'Shookri'], 2),
+  ('wedding', 32, 'Rameshwar Shah', array['Rameshwar Shah'], 1),
+  ('wedding', 33, 'Gita Saha', array['Gita Saha'], 1)
 on conflict (event_key, display_name) do update set
   invited_names = excluded.invited_names,
   party_size_limit = excluded.party_size_limit,
