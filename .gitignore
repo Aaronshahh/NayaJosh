@@ -20,3 +20,6 @@ skills-lock.json
 
 # supabase CLI scratch
 **/supabase/.temp/
+
+# invitation QR codes embed site passwords in their URLs; repo is public
+qr-codes/
