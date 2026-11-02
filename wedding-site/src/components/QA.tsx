@@ -359,7 +359,12 @@ export function QA() {
             </li>
             <li className="grid gap-1 sm:grid-cols-[10rem_1fr] sm:gap-6">
               <span className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-rose">Swati &amp; Rajiv</span>
-              <span className="text-text-light/75">WhatsApp</span>
+              <a
+                href="tel:+15194963541"
+                className="text-text-light/75 transition-colors hover:text-rose focus:outline-none focus-visible:ring-2 focus-visible:ring-rose"
+              >
+                +1 (519) 496-3541
+              </a>
             </li>
             <li className="grid gap-1 sm:grid-cols-[10rem_1fr] sm:gap-6">
               <span className="text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-rose">Matt Reid</span>
