@@ -4,6 +4,7 @@ import { useState, type ReactNode } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { useScrollReveal, useSectionLayout } from "./hooks";
+import { useAccess } from "./AccessProvider";
 import { FloralDivider } from "./Florals";
 import { SectionTabs, TabPanel, Parallax, SceneFrame, EASE } from "./ui/motion-primitives";
 
@@ -80,6 +81,7 @@ type MapPlace = {
   label: string;
   name: string;
   address: string;
+  mehndiOnly?: boolean;
 };
 
 const mapPlaces: MapPlace[] = [
@@ -94,6 +96,7 @@ const mapPlaces: MapPlace[] = [
     label: "Mehndi venue",
     name: "Cowan Recreation Centre",
     address: "1664 Huron Rd, Kitchener, ON N2R 1R6",
+    mehndiOnly: true,
   },
   { key: "comfort-inn", label: "Comfort Inn", name: hotels[0].name, address: hotels[0].address },
   { key: "glo", label: "GLō Best Western", name: hotels[1].name, address: hotels[1].address },
@@ -106,7 +109,7 @@ const directionsUrl = (place: { name: string; address: string }) =>
 const embedUrl = (place: { name: string; address: string }) =>
   `https://www.google.com/maps?q=${encodeURIComponent(`${place.name}, ${place.address}`)}&output=embed`;
 
-type LinkedItem = { name: string; desc: string; href?: string };
+type LinkedItem = { name: string; desc: string; href?: string; mehndiOnly?: boolean };
 
 type TravelCategory = {
   key: string;
@@ -200,6 +203,7 @@ const linkedCategories: TravelCategory[] = [
       {
         name: "Getting to the Mehndi",
         desc: "Cowan Recreation Centre in Kitchener is about an hour west via Highway 401 — plan to drive or carpool",
+        mehndiOnly: true,
       },
     ],
   },
@@ -342,9 +346,10 @@ function HotelCard({ hotel }: { hotel: Hotel }) {
   );
 }
 
-function PlacesMap() {
-  const [placeKey, setPlaceKey] = useState(mapPlaces[0].key);
-  const place = mapPlaces.find((p) => p.key === placeKey) ?? mapPlaces[0];
+function PlacesMap({ showMehndi }: { showMehndi: boolean }) {
+  const places = showMehndi ? mapPlaces : mapPlaces.filter((p) => !p.mehndiOnly);
+  const [placeKey, setPlaceKey] = useState(places[0].key);
+  const place = places.find((p) => p.key === placeKey) ?? places[0];
 
   return (
     <div className="mt-12">
@@ -352,11 +357,12 @@ function PlacesMap() {
         Find your way
       </h4>
       <p className="mx-auto mt-2 max-w-xl text-center text-sm leading-relaxed text-text-light/60">
-        Both venues and all three hotels sit within a few minutes of each other — pick a place to see
-        it on the map.
+        {showMehndi
+          ? "The wedding venue and all three hotels sit within a few minutes of each other, with the Mehndi venue about an hour west — pick a place to see it on the map."
+          : "The venue and all three hotels sit within a few minutes of each other — pick a place to see it on the map."}
       </p>
       <div className="mt-6 flex flex-wrap justify-center gap-2" role="group" aria-label="Choose a place to show on the map">
-        {mapPlaces.map((p) => (
+        {places.map((p) => (
           <button
             key={p.key}
             type="button"
@@ -406,6 +412,10 @@ export function Travel() {
   const layout = useSectionLayout();
   const reduceMotion = useReducedMotion();
   const [activeCategory, setActiveCategory] = useState(stayTab.key);
+  const { events } = useAccess();
+  // Wedding-only guests shouldn't see the Mehndi venue; admins (empty events
+  // list) see everything, matching the Schedule section's behaviour.
+  const showMehndi = events.length === 0 || events.includes("sangeet");
 
   return (
     <section
@@ -488,7 +498,7 @@ export function Travel() {
                   <HotelCard key={hotel.key} hotel={hotel} />
                 ))}
               </motion.ul>
-              <PlacesMap />
+              <PlacesMap showMehndi={showMehndi} />
             </TabPanel>
 
             {linkedCategories.map((category) => (
@@ -501,7 +511,9 @@ export function Travel() {
                     animate="show"
                     className="grid gap-x-12 gap-y-7 sm:grid-cols-2"
                   >
-                    {category.items.map((item) => (
+                    {category.items
+                      .filter((item) => showMehndi || !item.mehndiOnly)
+                      .map((item) => (
                       <motion.li
                         key={item.name}
                         variants={itemVariants}
