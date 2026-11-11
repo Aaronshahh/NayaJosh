@@ -18,7 +18,7 @@ export const EVENT_DETAILS: Record<
     key: "sangeet",
     name: "Mehndi & Welcome Dinner",
     date: "Saturday, June 12, 2027",
-    time: "4:00 PM – 8:00 PM EDT",
+    time: "4:00 PM – 9:00 PM EDT",
     location: "Cowan Recreation Centre, Kitchener, ON",
     description:
       "An evening of henna, food, music, and time with family and friends before the wedding celebrations begin.",

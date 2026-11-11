@@ -58,8 +58,8 @@ const events: Array<{
         label: "When",
         value: (
           <>
-            Saturday, June 12, 2027 · 4:00 PM – 8:00 PM EDT ·{" "}
-            <InlineLink href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Naya+%26+Josh+%E2%80%94+Mehndi+%26+Welcome+Dinner&dates=20270612T160000/20270612T200000&ctz=America/Toronto&location=Cowan+Recreation+Centre%2C+1664+Huron+Rd%2C+Kitchener%2C+ON+N2R+1R6">
+            Saturday, June 12, 2027 · 4:00 PM – 9:00 PM EDT ·{" "}
+            <InlineLink href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Naya+%26+Josh+%E2%80%94+Mehndi+%26+Welcome+Dinner&dates=20270612T160000/20270612T210000&ctz=America/Toronto&location=Cowan+Recreation+Centre%2C+1664+Huron+Rd%2C+Kitchener%2C+ON+N2R+1R6">
               Add to calendar
             </InlineLink>
           </>
