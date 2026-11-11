@@ -92,8 +92,8 @@ const mapPlaces: MapPlace[] = [
   {
     key: "mehndi",
     label: "Mehndi venue",
-    name: "Saffron Cuisine",
-    address: "450 Hespeler Road Unit 101, Cambridge, ON N1R 6J6",
+    name: "Cowan Recreation Centre",
+    address: "1664 Huron Rd, Kitchener, ON N2R 1R6",
   },
   { key: "comfort-inn", label: "Comfort Inn", name: hotels[0].name, address: hotels[0].address },
   { key: "glo", label: "GLō Best Western", name: hotels[1].name, address: hotels[1].address },
@@ -199,7 +199,7 @@ const linkedCategories: TravelCategory[] = [
       },
       {
         name: "Getting to the Mehndi",
-        desc: "Saffron Cuisine in Cambridge is about 45 minutes west via Highway 401 — plan to drive or carpool",
+        desc: "Cowan Recreation Centre in Kitchener is about an hour west via Highway 401 — plan to drive or carpool",
       },
     ],
   },

@@ -49,8 +49,8 @@ const events: Array<{
       {
         label: "Location",
         value: (
-          <InlineLink href="https://www.google.com/maps/search/?api=1&query=Saffron+Cuisine%2C+450+Hespeler+Road%2C+Cambridge%2C+ON+N1R+0E3">
-            Saffron Cuisine, Cambridge, ON
+          <InlineLink href="https://www.google.com/maps/search/?api=1&query=Cowan+Recreation+Centre%2C+1664+Huron+Rd%2C+Kitchener%2C+ON+N2R+1R6">
+            Cowan Recreation Centre, Kitchener, ON
           </InlineLink>
         ),
       },
@@ -59,7 +59,7 @@ const events: Array<{
         value: (
           <>
             Saturday, June 12, 2027 · 4:00 PM – 8:00 PM EDT ·{" "}
-            <InlineLink href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Naya+%26+Josh+%E2%80%94+Mehndi+%26+Welcome+Dinner&dates=20270612T160000/20270612T200000&ctz=America/Toronto&location=Saffron+Cuisine%2C+450+Hespeler+Road%2C+Unit+101%2C+Cambridge%2C+ON+N1R+0E3">
+            <InlineLink href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Naya+%26+Josh+%E2%80%94+Mehndi+%26+Welcome+Dinner&dates=20270612T160000/20270612T200000&ctz=America/Toronto&location=Cowan+Recreation+Centre%2C+1664+Huron+Rd%2C+Kitchener%2C+ON+N2R+1R6">
               Add to calendar
             </InlineLink>
           </>

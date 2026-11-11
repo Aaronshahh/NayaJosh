@@ -37,7 +37,7 @@ const scheduleItems: ScheduleDay[] = [
     tabTitle: "Mehendi",
     date: "Saturday, June 12, 2027",
     headline: "Mehndi Ceremony / Welcome Dinner!",
-    location: "Saffron Cuisine, 450 Hespeler Road, Unit 101, Cambridge, ON, N1R 0E3",
+    location: "Cowan Recreation Centre, 1664 Huron Rd, Kitchener, ON, N2R 1R6",
     attire: {
       label: "Wedding Attire: Semi-formal or Festive Indian Attire",
       paragraphs: [

@@ -19,7 +19,7 @@ export const EVENT_DETAILS: Record<
     name: "Mehndi & Welcome Dinner",
     date: "Saturday, June 12, 2027",
     time: "4:00 PM – 8:00 PM EDT",
-    location: "Saffron Cuisine, Cambridge, ON",
+    location: "Cowan Recreation Centre, Kitchener, ON",
     description:
       "An evening of henna, food, music, and time with family and friends before the wedding celebrations begin.",
     image: "/images/rsvp/mehndi.jpg",
